@@ -1,0 +1,10 @@
+contra_learning目录下是基于对比学习的方法，mae目录下是基于mae图像重建的方法
+1、两个目录下均包含poison_data_cifar100.py文件，用于生成中毒的cifar100数据集，默认中毒比例为1%，target class为类别0。生成的中毒数据集中，训练集是通过随机选取除目标类别外其他每个类别1%的图片，加上triger，然后移动到类别0中，测试集是给所有类别的图片都打上triger，然后删除类别0的所有图片（保留了一张噪声图片，防止这个文件夹为空）。所以测试时统计分类为0的样本比例就是攻击成功率
+2、contra_learning目录下
+contra_learning.py是基于特征重建对比学习的方法，需要用到支持集（support_data.py），修改代码中数据集路径后运行即可
+contra_learning_with_pretraing.py相比于contra_learning.py，添加了有标签的监督学习预训练
+support_data.py用于生成测试时所用的支持集，每个类别有十张图片
+3、mae目录下
+resnet_test.py是用于测试模型在干净的数据集上的效果，在这个代码上运行普通的resnet50模型和构建的resunet50_Classifier（模型中有decoder部分，但loss回传并没有用到decoder部分）得到了较大的差距，两种模型的切换在代码中的注释中已经写明。
+train_classifier_resnet50_cifar100.py文件是基于mae图像重建的方法，包含三个loss：分类损失，decoder重建损失和一致性损失，修改代码中的数据集路径即可运行。
+
